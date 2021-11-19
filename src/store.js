@@ -15,7 +15,7 @@ class Store {
     // Возвращаем функцию для отписки
     return () => {
       this.listners = this.listners.filter(item => item !== callback);
-    }
+    };
   }
 
   /**
@@ -51,8 +51,9 @@ class Store {
     this.setState({
       items: this.state.items.concat({
         code,
-        title: 'Новая запись №'+code
-      })
+        title: 'Новая запись №' + code,
+        selectedCount: 0,
+      }),
     });
   }
 
@@ -62,7 +63,7 @@ class Store {
    */
   deleteItem(code) {
     this.setState({
-      items: this.state.items.filter(item => item.code !== code)
+      items: this.state.items.filter(item => item.code !== code),
     });
   }
 
@@ -73,11 +74,14 @@ class Store {
   selectItem(code) {
     this.setState({
       items: this.state.items.map(item => {
-        if (item.code === code){
+        if (item.code === code) {
+          if (!item.selected) {
+            item.selectedCount = item.selectedCount + 1;
+          }
           item.selected = !item.selected;
         }
         return item;
-      })
+      }),
     });
   }
 }

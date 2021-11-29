@@ -52,7 +52,6 @@ class Store {
       items: this.state.items.concat({
         code,
         title: 'Новая запись №' + code,
-        selectedCount: 0,
       }),
     });
   }
@@ -75,14 +74,44 @@ class Store {
     this.setState({
       items: this.state.items.map(item => {
         if (item.code === code) {
-          if (!item.selected) {
-            item.selectedCount = item.selectedCount + 1;
-          }
-          item.selected = !item.selected;
+          return {
+            ...item,
+            selected: !item.selected,
+          };
         }
         return item;
       }),
     });
+  }
+
+  addToCart(code) {
+    this.setState({
+      ...this.state,
+      cart: {
+        ...this.state.cart,
+        [code]: this.state.cart[code] ? this.state.cart[code] + 1 : 1,
+      },
+    });
+  }
+
+  getCartInfo() {
+    const enteries = Object.entries(this.state.cart);
+    let countItemsInCart = 0;
+    let totalPrice = 0;
+    const items = [];
+
+    enteries.forEach(([itemId, count]) => {
+      countItemsInCart += count;
+      const item = this.state.items.find(el => el.code == itemId);
+      totalPrice += item.price * count;
+      items.push({ title: item.title, count, price: item.price });
+    });
+
+    return {
+      itemsCount: countItemsInCart,
+      totalPrice,
+      items,
+    };
   }
 }
 

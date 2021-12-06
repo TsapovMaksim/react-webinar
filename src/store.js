@@ -85,33 +85,28 @@ class Store {
   }
 
   addToCart(code) {
+    const cart = this.state.cart;
+    const item = this.state.items.find(el => el.code == code);
+    const itemInCart = cart.items.find(el => el.code == code);
+    const newItemInCart = !!itemInCart
+      ? { ...itemInCart, count: itemInCart.count + 1 }
+      : { ...item, count: 1 };
+
+    const newCartItems = [
+      newItemInCart,
+      ...cart.items.filter(el => el.code != code),
+    ];
+    const newTotalPrice = cart.totalPrice + item.price;
+    const newTotalCount = cart.totalCount + 1;
+
     this.setState({
       ...this.state,
       cart: {
-        ...this.state.cart,
-        [code]: this.state.cart[code] ? this.state.cart[code] + 1 : 1,
+        items: newCartItems,
+        totalPrice: newTotalPrice,
+        totalCount: newTotalCount,
       },
     });
-  }
-
-  getCartInfo() {
-    const enteries = Object.entries(this.state.cart);
-    let countItemsInCart = 0;
-    let totalPrice = 0;
-    const items = [];
-
-    enteries.forEach(([itemId, count]) => {
-      countItemsInCart += count;
-      const item = this.state.items.find(el => el.code == itemId);
-      totalPrice += item.price * count;
-      items.push({ title: item.title, count, price: item.price });
-    });
-
-    return {
-      itemsCount: countItemsInCart,
-      totalPrice,
-      items,
-    };
   }
 }
 

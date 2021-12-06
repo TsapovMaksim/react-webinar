@@ -25,7 +25,7 @@ const CartModal = ({ cartInfo, open, onClose }) => {
             {cartInfo.totalPrice} ₽
           </span>
           <span className='cart-modal__result-count'>
-            {cartInfo.itemsCount} шт
+            {cartInfo.totalCount} шт
           </span>
         </div>
       </div>
@@ -40,7 +40,7 @@ CartModal.propTypes = {
 };
 
 CartModal.defaultProps = {
-  cartInfo: { itemsCount: 0, totalPrice: 0, items: [] },
+  cartInfo: { totalCount: 0, totalPrice: 0, items: [] },
   onDeleted: () => {},
   open: false,
 };

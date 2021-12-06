@@ -11,7 +11,7 @@ import CartModal from './components/cartModal';
 function App({ store }) {
   console.log('App');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const cartInfo = store.getCartInfo();
+  const cartInfo = store.getState().cart;
 
   const callbacks = {
     onOpenModal: useCallback(() => {

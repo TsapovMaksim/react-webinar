@@ -9,9 +9,9 @@ function Controls({ onShow, cartInfo }) {
     <div className='Controls'>
       <div className='Controls__descr'>В корзине:</div>
       <div className='Controls__tovars'>
-        {cartInfo.itemsCount > 0
-          ? `${cartInfo.itemsCount} ${plural(
-              cartInfo.itemsCount,
+        {cartInfo.totalCount > 0
+          ? `${cartInfo.totalCount} ${plural(
+              cartInfo.totalCount,
               'товар',
               'товара',
               'товаров'
@@ -30,7 +30,7 @@ Controls.propTypes = {
 
 Controls.defaultProps = {
   onShow: () => {},
-  cartInfo: { itemsCount: 0, totalPrice: 0, items: [] },
+  cartInfo: { totalCount: 0, totalPrice: 0, items: [] },
 };
 
 export default React.memo(Controls);

@@ -19,7 +19,11 @@ const store = new Store({
     {code: 7, title: 'Седьмой', price: 400},
     {code: 8, title: 'Седьмой', price: 400}
   ],
-  cart: {},
+  cart: {
+    items: [],
+    totalPrice: 0,
+    totalCount: 0
+  },
 });
 
 // Сообщаем реакту что и куда рендерить.

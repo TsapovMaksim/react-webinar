@@ -14,3 +14,10 @@
     font-weight: bold;
     margin: 0 15px;
 }
+
+.BasketSimple__link{
+    margin-right: auto;
+    color: #0087E9;
+    text-decoration: underline;
+    cursor: pointer;
+}

@@ -85,6 +85,13 @@ class Store {
   get catalog(){
     return this.get('catalog');
   }
+  
+  /**
+   * @return {CurrentTovarStore}
+   */
+  get currentTovar(){
+    return this.get('currentTovar');
+  }
 }
 
 export default Store;

@@ -22,3 +22,6 @@ body{
     margin: 0;
     padding: 20px 20px 10px;
 }
+.Layout__center {
+    padding-bottom: 15px;
+}

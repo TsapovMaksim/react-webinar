@@ -1,0 +1,17 @@
+.Pagination {
+  display: flex;
+}
+
+.Pagination__item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.Pagination__item--active {
+  background-color: #000;
+  color: #fff;
+}

@@ -7,7 +7,7 @@ class CurrentTovarStore extends StoreModule {
   initState() {
     return {
       item: {},
-      loadingState: "never",
+      loadingState: false,
     };
   }
 
@@ -17,14 +17,14 @@ class CurrentTovarStore extends StoreModule {
   async load(id) {
     this.setState({
       item: {},
-      loadingState: "loading",
+      loadingState: false,
     });
     const response = await fetch(
       `/api/v1/articles/${id}?fields=*,maidIn(title,code),category(title)`
     );
     const json = await response.json();
     this.setState({
-      loadingState: "loaded",
+      loadingState: true,
       item: {
         ...json.result,
       },

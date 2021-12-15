@@ -26,7 +26,7 @@ const TovarPage = () => {
     openModal: useCallback(() => store.modals.open("basket"), [store]),
   };
 
-  if (select.loadingState !== "loaded") {
+  if (!select.loadingState) {
     return (
       <Layout>
         <div>Loading ...</div>

@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import propTypes from "prop-types";
 import "./styles.css";
 
-const Pagination = ({ startValue, endValue, onClick }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
+const Pagination = ({ startValue, endValue, onClick, currentPage }) => {
   const onItemClick = (index) => {
-    const newSkip = (startValue + index - 1) * 10;
-    setActiveIndex(index);
-    onClick(newSkip);
+    const pageNumber = startValue + index;
+    onClick(pageNumber);
   };
 
   return (
@@ -16,7 +13,9 @@ const Pagination = ({ startValue, endValue, onClick }) => {
       {new Array(endValue - startValue + 1).fill(0).map((_, idx) => (
         <div
           onClick={() => onItemClick(idx)}
-          className={`Pagination__item ${activeIndex === idx ? "Pagination__item--active" : ""}`}
+          className={`Pagination__item ${
+            currentPage === startValue + idx ? "Pagination__item--active" : ""
+          }`}
           key={idx}
         >
           {startValue + idx}
@@ -29,6 +28,7 @@ const Pagination = ({ startValue, endValue, onClick }) => {
 Pagination.propTypes = {
   startValue: propTypes.number.isRequired,
   endValue: propTypes.number.isRequired,
+  currentPage: propTypes.number.isRequired,
   onClick: propTypes.func,
 };
 
@@ -36,6 +36,7 @@ Pagination.defaultProps = {
   onClick: () => {},
   startValue: 1,
   endValue: 2,
+  currentPage: 1,
 };
 
 export default React.memo(Pagination);

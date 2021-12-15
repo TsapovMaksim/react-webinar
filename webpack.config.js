@@ -15,9 +15,9 @@ let config = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
+    // base: '/',
     // Очистить ./dist от предыдущей сборки
     clean: true,
-    base: '/'
   },
   plugins: [
     // Сборка стилей в отдельный файл

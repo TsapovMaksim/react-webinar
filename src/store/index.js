@@ -1,3 +1,4 @@
+
 /**
  * Хранилище состояния приложения
  */
@@ -86,8 +87,25 @@ class Store {
     return this.get('catalog');
   }
 
+  /**
+   * @return {ArticleStore}
+   */
+  get article(){
+    return this.get('article');
+  }
+
+  /** 
+   * @return {CategoriesStore}
+  */
   get categories() {
     return this.get('categories');
+  }
+  
+  /**
+   * @return {CountriesStore} 
+   */
+  get countries() {
+    return this.get('countries');
   }
 }
 

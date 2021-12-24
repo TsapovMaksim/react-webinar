@@ -14,15 +14,16 @@ function Article() {
   // Параметры из пути
   const params = useParams();
 
-  // Начальная загрузка
-  useInit(async () => {
-    await store.get('article').load(params.id);
-  }, [params.id]);
-
   const select = useSelector(state => ({
     article: state.article.data,
     waiting: state.article.waiting,
   }));
+
+  // Начальная загрузка
+  useInit(async () => {
+    store.get('article').load(params.id);
+  }, [params.id]);
+
 
   const callbacks = {
     addToBasket: useCallback((_id) => store.basket.add(_id), [store]),

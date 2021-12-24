@@ -92,7 +92,6 @@ class CatalogStore extends StoreModule {
       urlParams.append('search[category]', newParams.category);
     }
 
-    console.log(urlParams.toString());
     const response = await fetch(`/api/v1/articles?${urlParams.toString()}`);
     const json = await response.json();
 

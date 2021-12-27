@@ -14,20 +14,21 @@
 
 .ArticleEdit-Input label {
   box-sizing: border-box;
-  width: 300px;
   display: flex;
   flex-direction: column;
 }
 
 .ArticleEdit-Input input {
-  box-sizing: border-box;
-  width: 300px;
 }
 
 .ArticleEdit-Input textarea {
   box-sizing: border-box;
   width: 100%;
   height: 150px;
+}
+
+.ArticleEdit-Input_description label {
+  width: 100%;
 }
 
 .ArticleEdit-Errors_Title {

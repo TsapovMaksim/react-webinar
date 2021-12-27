@@ -4,21 +4,12 @@ import { cn } from "@bem-react/classname";
 
 import Select from "../select";
 import Input from "../input";
-
-import useStore from "../../utils/use-store";
-import useSelector from "../../utils/use-selector";
+import Textarea from "../textarea";
 
 import "./styles.css";
 
 const ArticleForm = (props) => {
-  const store = useStore();
   const className = cn("ArticleEdit");
-
-  const select = useSelector((state) => ({
-    waiting: state.article.edit.waiting,
-    isValid: state.article.edit.isValid,
-    errors: state.article.edit.errors,
-  }));
 
   const [formData, setFormData] = useState({
     title: props.article?.title || "",
@@ -29,28 +20,11 @@ const ArticleForm = (props) => {
     category: props.article?.category._id || "",
   });
 
-  const handleChange = (value, key) => {
-    setFormData({ ...formData, [key]: value });
+  const handleChange = (key) => {
+    return (value) => {
+      setFormData({ ...formData, [key]: value });
+    };
   };
-
-  const inputs = [
-    { type: "text", title: "Название", name: "title" },
-    { type: "textarea", title: "Описание", name: "description" },
-    {
-      type: "select",
-      title: "Страна производитель",
-      name: "country",
-      options: props.countries,
-    },
-    {
-      type: "select",
-      title: "Категория",
-      name: "category",
-      options: props.categories,
-    },
-    { type: "text", title: "Год выпуска", name: "edition" },
-    { type: "text", title: "Цена", name: "price" },
-  ];
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -64,48 +38,65 @@ const ArticleForm = (props) => {
       maidIn: { _id: formData["country"] },
     };
 
-    store.article.update(data);
+    props.onSubmit(data);
   };
 
   return (
     <div className={className()}>
       <form onSubmit={submitHandler}>
-        {inputs.map((el, idx) => (
-          <div key={idx} className={className("Input")}>
-            <label>
-              {el.title}
-              {el.type !== "select" && el.type !== "textarea" && (
-                <Input
-                  onChange={(value) => {
-                    handleChange(value, el.name);
-                  }}
-                  value={formData[el.name]}
-                />
-              )}
-              {el.type === "select" && (
-                <Select
-                  onChange={(value) => handleChange(value, el.name)}
-                  value={formData[el.name]}
-                  options={el.options}
-                />
-              )}
-              {el.type === "textarea" && (
-                <textarea
-                  value={formData[el.name]}
-                  onChange={(e) => handleChange(e.target.value, el.name)}
-                />
-              )}
-            </label>
-          </div>
-        ))}
-        <button disabled={select.waiting} type="submit">
-          {select.waiting ? "Загрузка..." : "Отправить"}
+        <div className={className("Input")}>
+          <label>
+            Название
+            <Input theme="big" onChange={handleChange("title")} value={formData.title} />
+          </label>
+        </div>
+        <div className={className("Input", { description: true })}>
+          <label>
+            Описание
+            <Textarea value={formData.description} onChange={handleChange("description")} />
+          </label>
+        </div>
+        <div className={className("Input")}>
+          <label>
+            Страна производитель
+            <Select
+              onChange={handleChange("country")}
+              value={formData.country}
+              options={props.countries}
+            />
+          </label>
+        </div>
+        <div className={className("Input")}>
+          <label>
+            Категория
+            <Select
+              onChange={handleChange("category")}
+              value={formData.category}
+              options={props.categories}
+            />
+          </label>
+        </div>
+        <div className={className("Input")}>
+          <label>
+            Год выпуска
+            <Input theme="big" onChange={handleChange("edition")} value={formData.edition} />
+          </label>
+        </div>
+        <div className={className("Input")}>
+          <label>
+            Цена
+            <Input theme="big" onChange={handleChange("price")} value={formData.price} />
+          </label>
+        </div>
+
+        <button disabled={props.waiting} type="submit">
+          {props.waiting ? "Загрузка..." : "Отправить"}
         </button>
       </form>
-      {!select.isValid && select.errors && (
+      {!props.isValid && props.errors && (
         <div className={className("Errors")}>
           <h3 className={className("Errors", { Title: true })}>Ошибки</h3>
-          {select.errors.map((error) => (
+          {props.errors.map((error) => (
             <p key={error.path} className={className("Errors", { Item: true })}>
               {error.path} {error.message}
             </p>
@@ -120,12 +111,20 @@ ArticleForm.propTypes = {
   article: propTypes.object.isRequired,
   countries: propTypes.array.isRequired,
   categories: propTypes.array.isRequired,
+  errors: propTypes.array.isRequired,
+  isValid: propTypes.bool.isRequired,
+  waiting: propTypes.bool.isRequired,
+  onSubmit: propTypes.func.isRequired,
 };
 
 ArticleForm.defaultProps = {
   article: {},
   countries: [],
   categories: [],
+  errors: [],
+  isValid: true,
+  waiting: false,
+  onSubmit: () => {},
 };
 
 export default React.memo(ArticleForm);

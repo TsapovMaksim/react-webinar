@@ -40,41 +40,6 @@ class CategoriesStore extends StoreModule {
       return;
     }
     const items = json.result.items;
-    /**
-     * Функция для получения массива значений селекта
-     */
-    function getSelectValues(parent, level, selectTree) {
-      let finalSelectValues = [];
-
-      finalSelectValues.push({
-        _id: parent._id,
-        title: "-".repeat(level) + parent.title,
-        value: parent._id,
-      });
-
-      for (let i = 0; i < parent.children.length; i++) {
-        const childrenItem = parent.children[i];
-        const newSelectItem = {
-          _id: childrenItem._id,
-          title: "-".repeat(level + 1) + childrenItem.title,
-          value: childrenItem._id,
-        };
-
-        // Если ребенек тоже является родителем
-        if (childrenItem._id in selectTree) {
-          const childrenItems = getSelectValues(
-            selectTree[childrenItem._id],
-            level + 1,
-            selectTree
-          );
-          finalSelectValues = [...finalSelectValues, ...childrenItems];
-          continue;
-        }
-
-        finalSelectValues.push(newSelectItem);
-      }
-      return finalSelectValues;
-    }
 
     // получаем объект с родителями и их детьми
     const selectTree = items.reduce((acc, curr) => {
@@ -97,7 +62,7 @@ class CategoriesStore extends StoreModule {
     let selectValues = [];
 
     initialParents.forEach((parent) => {
-      selectValues = [...selectValues, ...getSelectValues(parent, 0, selectTree)];
+      selectValues = [...selectValues, ...this.getSelectValues(parent, 0, selectTree)];
     });
 
     this.setState({
@@ -105,6 +70,38 @@ class CategoriesStore extends StoreModule {
       items: selectValues,
       waiting: false,
     });
+  }
+
+  /**
+   * Функция для получения массива значений селекта
+   */
+  getSelectValues(parent, level, selectTree) {
+    let finalSelectValues = [];
+
+    finalSelectValues.push({
+      _id: parent._id,
+      title: "-".repeat(level) + parent.title,
+      value: parent._id,
+    });
+
+    for (let i = 0; i < parent.children.length; i++) {
+      const childrenItem = parent.children[i];
+      const newSelectItem = {
+        _id: childrenItem._id,
+        title: "-".repeat(level + 1) + childrenItem.title,
+        value: childrenItem._id,
+      };
+
+      // Если ребенек тоже является родителем
+      if (childrenItem._id in selectTree) {
+        const childrenItems = this.getSelectValues(selectTree[childrenItem._id], level + 1, selectTree);
+        finalSelectValues = [...finalSelectValues, ...childrenItems];
+        continue;
+      }
+
+      finalSelectValues.push(newSelectItem);
+    }
+    return finalSelectValues;
   }
 }
 

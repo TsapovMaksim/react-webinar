@@ -18,16 +18,17 @@ function EditArticle() {
     waiting: state.article.waiting || state.countries.waiting || state.categories.waiting,
     countries: state.countries.items,
     categories: state.categories.items,
+    edit: state.article.edit,
   }));
+
+  const callbacks = {
+    onSubmit: useCallback((formData) => store.article.update(formData), [store]),
+  };
 
   // Начальная загрузка
   useInit(async () => {
-    if (Object.keys(select.article).length === 0) {
-      store.article.load(params.id);
-    }
-    if (select.categories.length === 0) {
-      store.categories.load();
-    }
+    store.article.load(params.id);
+    store.categories.load();
     store.countries.load();
   }, [params.id]);
 
@@ -48,6 +49,10 @@ function EditArticle() {
           article={select.article}
           countries={select.countries}
           categories={select.categories}
+          isValid={select.edit.isValid}
+          waiting={select.edit.waiting}
+          errors={select.edit.errors}
+          onSubmit={callbacks.onSubmit}
         />
       </Spinner>
     </Layout>
